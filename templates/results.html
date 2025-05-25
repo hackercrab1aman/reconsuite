@@ -1,0 +1,356 @@
+{% extends 'layout.html' %}
+
+{% block title %}Scan Results{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Scan Information Header -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h2><i class="fas fa-search me-2"></i>Scan Results</h2>
+            <div class="d-flex flex-wrap mt-3">
+                <div class="me-4 mb-2">
+                    <strong><i class="fas fa-globe me-2"></i>Target:</strong>
+                    <span class="badge bg-primary">{{ scan_info.target }}</span>
+                </div>
+                <div class="me-4 mb-2">
+                    <strong><i class="fas fa-clock me-2"></i>Started:</strong>
+                    <span>{{ scan_info.start_time }}</span>
+                </div>
+                <div class="me-4 mb-2">
+                    <strong><i class="fas fa-tag me-2"></i>Scan ID:</strong>
+                    <span class="text-monospace">{{ scan_info.id }}</span>
+                    <input type="hidden" id="scanId" value="{{ scan_info.id }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+            <button id="runScanBtn" class="btn btn-primary me-2">
+                <i class="fas fa-play me-2"></i>Run Scan
+            </button>
+            <button id="exportBtn" class="btn btn-outline-secondary" disabled>
+                <i class="fas fa-file-export me-2"></i>Export Results
+            </button>
+        </div>
+    </div>
+
+    <!-- Progress Container -->
+    <div id="scanContainer" class="mb-5">
+        <div class="card border-0 shadow-lg">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-4"><i class="fas fa-radar me-2"></i>Scan in Progress</h4>
+                <div class="progress mb-3" style="height: 25px;">
+                    <div id="scanProgress" class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" style="width: 0%"></div>
+                </div>
+                <p id="progressText" class="text-center">Initializing scan...</p>
+                <div class="spinner"></div>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Please do not close this window while the scan is running. Results will be displayed automatically when completed.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Container -->
+    <div id="resultsContainer" style="display: none;">
+        <!-- Results Navigation Tabs -->
+        <ul class="nav nav-tabs mb-4" id="resultsTabs" role="tablist">
+            {% if scan_info.options.dns_recon %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="dns-tab" data-bs-toggle="tab" data-bs-target="#dns" 
+                        type="button" role="tab" aria-controls="dns" aria-selected="true">
+                    <i class="fas fa-network-wired me-1"></i> DNS
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.whois_lookup %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="whois-tab" data-bs-toggle="tab" data-bs-target="#whois" 
+                        type="button" role="tab" aria-controls="whois" aria-selected="false">
+                    <i class="fas fa-address-card me-1"></i> WHOIS
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.subdomain_enum %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="subdomains-tab" data-bs-toggle="tab" data-bs-target="#subdomains" 
+                        type="button" role="tab" aria-controls="subdomains" aria-selected="false">
+                    <i class="fas fa-sitemap me-1"></i> Subdomains
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.port_scan %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ports-tab" data-bs-toggle="tab" data-bs-target="#ports" 
+                        type="button" role="tab" aria-controls="ports" aria-selected="false">
+                    <i class="fas fa-plug me-1"></i> Ports
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.directory_discovery %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="directories-tab" data-bs-toggle="tab" data-bs-target="#directories" 
+                        type="button" role="tab" aria-controls="directories" aria-selected="false">
+                    <i class="fas fa-folder-open me-1"></i> Directories
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.vulnerability_scan %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="vulnerabilities-tab" data-bs-toggle="tab" data-bs-target="#vulnerabilities" 
+                        type="button" role="tab" aria-controls="vulnerabilities" aria-selected="false">
+                    <i class="fas fa-bug me-1"></i> Vulnerabilities
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.header_analysis %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="headers-tab" data-bs-toggle="tab" data-bs-target="#headers" 
+                        type="button" role="tab" aria-controls="headers" aria-selected="false">
+                    <i class="fas fa-shield-alt me-1"></i> Headers
+                </button>
+            </li>
+            {% endif %}
+            
+            {% if scan_info.options.tech_detection %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="technologies-tab" data-bs-toggle="tab" data-bs-target="#technologies" 
+                        type="button" role="tab" aria-controls="technologies" aria-selected="false">
+                    <i class="fas fa-code me-1"></i> Technologies
+                </button>
+            </li>
+            {% endif %}
+            
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary" 
+                        type="button" role="tab" aria-controls="summary" aria-selected="false">
+                    <i class="fas fa-chart-pie me-1"></i> Summary
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="resultsTabContent">
+            <!-- DNS Results Tab -->
+            {% if scan_info.options.dns_recon %}
+            <div class="tab-pane fade show active" id="dns" role="tabpanel" aria-labelledby="dns-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-network-wired me-2"></i>DNS Records</h5>
+                    </div>
+                    <div id="dnsReconResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading DNS records...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- WHOIS Results Tab -->
+            {% if scan_info.options.whois_lookup %}
+            <div class="tab-pane fade" id="whois" role="tabpanel" aria-labelledby="whois-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-address-card me-2"></i>WHOIS Information</h5>
+                    </div>
+                    <div id="whoisResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading WHOIS information...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Subdomain Results Tab -->
+            {% if scan_info.options.subdomain_enum %}
+            <div class="tab-pane fade" id="subdomains" role="tabpanel" aria-labelledby="subdomains-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-sitemap me-2"></i>Subdomain Enumeration</h5>
+                    </div>
+                    <div id="subdomainResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading subdomain information...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Port Scan Results Tab -->
+            {% if scan_info.options.port_scan %}
+            <div class="tab-pane fade" id="ports" role="tabpanel" aria-labelledby="ports-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-plug me-2"></i>Port Scan Results</h5>
+                    </div>
+                    <div id="portScanResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading port scan results...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Port Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="portDistributionChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Directory Discovery Results Tab -->
+            {% if scan_info.options.directory_discovery %}
+            <div class="tab-pane fade" id="directories" role="tabpanel" aria-labelledby="directories-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-folder-open me-2"></i>Directory & File Discovery</h5>
+                    </div>
+                    <div id="directoryResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading directory discovery results...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Vulnerability Scan Results Tab -->
+            {% if scan_info.options.vulnerability_scan %}
+            <div class="tab-pane fade" id="vulnerabilities" role="tabpanel" aria-labelledby="vulnerabilities-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-bug me-2"></i>Vulnerability Scan Results</h5>
+                    </div>
+                    <div id="vulnerabilityResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading vulnerability scan results...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Vulnerability Types</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="vulnTypesChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- HTTP Header Analysis Results Tab -->
+            {% if scan_info.options.header_analysis %}
+            <div class="tab-pane fade" id="headers" role="tabpanel" aria-labelledby="headers-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>HTTP Header Analysis</h5>
+                    </div>
+                    <div id="headerResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading header analysis results...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Technology Detection Results Tab -->
+            {% if scan_info.options.tech_detection %}
+            <div class="tab-pane fade" id="technologies" role="tabpanel" aria-labelledby="technologies-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-code me-2"></i>Technology Detection</h5>
+                    </div>
+                    <div id="techResults">
+                        <div class="card-body text-center">
+                            <div class="spinner"></div>
+                            <p>Loading technology detection results...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Technology Categories</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="techCategoriesChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Summary Tab -->
+            <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Scan Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Target Information</h6>
+                                <ul class="list-group list-group-flush mb-4">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Domain/IP
+                                        <span class="badge bg-primary">{{ scan_info.target }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Scan Start Time
+                                        <span>{{ scan_info.start_time }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Scan ID
+                                        <span class="text-monospace">{{ scan_info.id }}</span>
+                                    </li>
+                                </ul>
+                                
+                                <h6>Scan Modules</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for option, enabled in scan_info.options.items() %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ option.replace('_', ' ').title() }}
+                                        {% if enabled %}
+                                        <span class="badge bg-success">Enabled</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Disabled</span>
+                                        {% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="summaryCharts">
+                                    <p class="text-center">
+                                        <div class="spinner"></div>
+                                        Loading summary charts...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

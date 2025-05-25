@@ -1,0 +1,149 @@
+{% extends 'layout.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-4"><i class="fas fa-info-circle me-2"></i>About ReconSuite</h2>
+                    <p class="lead">ReconSuite is a comprehensive web reconnaissance tool designed to streamline and automate the process of gathering information about web targets.</p>
+                    
+                    <h4 class="mt-4">Features</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush mb-4">
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Domain Information Gathering
+                                </li>
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Subdomain Enumeration
+                                </li>
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Port Scanning
+                                </li>
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Directory & File Discovery
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush mb-4">
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Basic Vulnerability Scanning
+                                </li>
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>HTTP Header Analysis
+                                </li>
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Technology Stack Detection
+                                </li>
+                                <li class="list-group-item bg-transparent">
+                                    <i class="fas fa-check text-success me-2"></i>Comprehensive Reporting
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">Technical Implementation</h4>
+                    <p>ReconSuite is built using a combination of modern technologies:</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Backend</h5>
+                            <ul>
+                                <li>Flask web framework</li>
+                                <li>Python libraries:
+                                    <ul>
+                                        <li>dnspython for DNS reconnaissance</li>
+                                        <li>python-whois for WHOIS lookups</li>
+                                        <li>requests for HTTP interactions</li>
+                                        <li>beautifulsoup4 for HTML parsing</li>
+                                        <li>socket for basic port scanning</li>
+                                        <li>python-nmap for advanced port scanning</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Frontend</h5>
+                            <ul>
+                                <li>Bootstrap for responsive UI</li>
+                                <li>JavaScript for interactive elements</li>
+                                <li>Chart.js for data visualization</li>
+                                <li>DataTables for result presentation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4" id="ethics">Ethical Usage Guidelines</h4>
+                    <div class="alert alert-warning">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                            </div>
+                            <div>
+                                <p class="mb-0">ReconSuite is a powerful tool designed for security professionals and ethical hackers. Please adhere to the following guidelines when using this tool:</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <ol class="list-group list-group-numbered mb-4">
+                        <li class="list-group-item bg-transparent">
+                            <strong>Authorization:</strong> Only scan targets that you own or have explicit permission to test.
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <strong>Legal Compliance:</strong> Be aware of and adhere to all applicable laws and regulations in your jurisdiction.
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <strong>Responsible Disclosure:</strong> If you discover vulnerabilities, report them responsibly to the affected organization.
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <strong>Resource Consideration:</strong> Be mindful of the impact your scanning may have on the target's resources.
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <strong>Data Privacy:</strong> Handle any discovered information with appropriate care and confidentiality.
+                        </li>
+                    </ol>
+                    
+                    <div class="alert alert-danger">
+                        <strong>Important Notice:</strong> Unauthorized scanning of networks or systems is illegal in many jurisdictions and can result in severe civil and criminal penalties. The developers of ReconSuite are not responsible for any misuse of this tool.
+                    </div>
+                    
+                    <h4 class="mt-4">Limitations</h4>
+                    <p>While ReconSuite provides comprehensive reconnaissance capabilities, users should be aware of its limitations:</p>
+                    <ul>
+                        <li>The tool performs basic vulnerability scanning only and is not a replacement for professional security audits.</li>
+                        <li>Rate limiting is implemented to avoid detection, which may increase scan duration.</li>
+                        <li>Results may vary depending on network conditions and target configurations.</li>
+                        <li>Some advanced scanning techniques are not implemented to avoid potential legal issues.</li>
+                    </ul>
+                    
+                    <h4 class="mt-4">Additional Resources</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">OWASP</h5>
+                                    <p class="card-text">The Open Web Application Security Project is a nonprofit foundation that works to improve software security.</p>
+                                    <a href="https://owasp.org/" target="_blank" class="btn btn-outline-primary">Visit OWASP</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Web Security Academy</h5>
+                                    <p class="card-text">Free online training from PortSwigger, creators of Burp Suite.</p>
+                                    <a href="https://portswigger.net/web-security" target="_blank" class="btn btn-outline-primary">Visit Academy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

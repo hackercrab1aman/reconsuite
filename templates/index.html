@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 mb-4"><i class="fas fa-shield-alt me-3"></i>ReconSuite</h1>
+            <p class="lead mb-5">A comprehensive web reconnaissance tool that automates and streamlines the entire recon process. Gather intelligence on domains, discover vulnerabilities, and analyze security posture - all in one place.</p>
+            
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{{ url_for('scan') }}" class="btn btn-primary btn-lg px-4 gap-3">
+                    <i class="fas fa-search me-2"></i> Start New Scan
+                </a>
+                <a href="{{ url_for('about') }}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-info-circle me-2"></i> Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5 pt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm scan-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-network-wired fa-2x p-3"></i>
+                    </div>
+                    <h2 class="h4 fw-bolder">Comprehensive Discovery</h2>
+                    <p>From DNS records to subdomain enumeration, port scanning, and directory discovery - ReconSuite covers all aspects of reconnaissance.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm scan-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-bug fa-2x p-3"></i>
+                    </div>
+                    <h2 class="h4 fw-bolder">Vulnerability Detection</h2>
+                    <p>Identify common web vulnerabilities, analyze HTTP headers for security issues, and detect technology stacks with potential weaknesses.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm scan-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3">
+                        <i class="fas fa-chart-pie fa-2x p-3"></i>
+                    </div>
+                    <h2 class="h4 fw-bolder">Advanced Reporting</h2>
+                    <p>Get detailed reports with interactive visualizations and actionable insights to understand the security posture of your targets.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h3 class="mb-4">Why Use ReconSuite?</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-success">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5>All-in-One Solution</h5>
+                                            <p>No need to switch between multiple tools - ReconSuite has everything in one place.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-success">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5>User-Friendly Interface</h5>
+                                            <p>Easy-to-use web interface with interactive visualizations and clear reporting.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-success">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5>Time-Saving Automation</h5>
+                                            <p>Automate repetitive tasks and get comprehensive results in minutes, not hours.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <div class="me-3 text-success">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </div>
+                                        <div>
+                                            <h5>Ethical Testing Focus</h5>
+                                            <p>Built with ethical security testing in mind, emphasizing responsible use.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Remember to only scan targets you own or have explicit permission to test.
+                            <a href="{{ url_for('about') }}#ethics" class="alert-link">Read our ethics guidelines</a>.
+                        </div>
+                        <a href="{{ url_for('scan') }}" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Start Your First Scan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

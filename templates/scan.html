@@ -1,0 +1,149 @@
+{% extends 'layout.html' %}
+
+{% block title %}New Scan{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-search me-2"></i>New Reconnaissance Scan</h3>
+                </div>
+                <div class="card-body">
+                    <form id="scanForm" method="POST" action="{{ url_for('scan') }}">
+                        <div class="mb-4">
+                            <label for="targetInput" class="form-label">Target Domain or IP Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                <input type="text" class="form-control" id="targetInput" name="target" 
+                                    placeholder="example.com or 192.168.1.1" required>
+                            </div>
+                            <div class="form-text">Enter a domain name or IP address to scan.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Scan Options</label>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Select the reconnaissance modules to run:</span>
+                                <button type="button" id="toggleAllBtn" class="btn btn-sm btn-outline-secondary">Select All</button>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="dnsRecon" name="dns_recon" checked>
+                                        <label class="form-check-label" for="dnsRecon">
+                                            <i class="fas fa-network-wired me-2"></i>DNS Reconnaissance
+                                        </label>
+                                        <div class="form-text">Query DNS records (A, AAAA, MX, TXT, etc.)</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="whoisLookup" name="whois_lookup" checked>
+                                        <label class="form-check-label" for="whoisLookup">
+                                            <i class="fas fa-address-card me-2"></i>WHOIS Lookup
+                                        </label>
+                                        <div class="form-text">Get domain registration information</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="subdomainEnum" name="subdomain_enum" checked>
+                                        <label class="form-check-label" for="subdomainEnum">
+                                            <i class="fas fa-sitemap me-2"></i>Subdomain Enumeration
+                                        </label>
+                                        <div class="form-text">Discover subdomains of the target domain</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="portScan" name="port_scan" checked>
+                                        <label class="form-check-label" for="portScan">
+                                            <i class="fas fa-plug me-2"></i>Port Scanning
+                                        </label>
+                                        <div class="form-text">Check for open ports and services</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="directoryDiscovery" name="directory_discovery" checked>
+                                        <label class="form-check-label" for="directoryDiscovery">
+                                            <i class="fas fa-folder-open me-2"></i>Directory Discovery
+                                        </label>
+                                        <div class="form-text">Find directories and files on the web server</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="vulnerabilityScan" name="vulnerability_scan" checked>
+                                        <label class="form-check-label" for="vulnerabilityScan">
+                                            <i class="fas fa-bug me-2"></i>Vulnerability Scanning
+                                        </label>
+                                        <div class="form-text">Check for common web vulnerabilities</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="headerAnalysis" name="header_analysis" checked>
+                                        <label class="form-check-label" for="headerAnalysis">
+                                            <i class="fas fa-shield-alt me-2"></i>HTTP Header Analysis
+                                        </label>
+                                        <div class="form-text">Analyze security headers</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="techDetection" name="tech_detection" checked>
+                                        <label class="form-check-label" for="techDetection">
+                                            <i class="fas fa-code me-2"></i>Technology Detection
+                                        </label>
+                                        <div class="form-text">Identify web technologies and frameworks</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h5 class="alert-heading">Important Notice</h5>
+                                    <p class="mb-0">Only scan targets that you own or have explicit permission to test. Unauthorized scanning may be illegal.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="ethicsAgreement" required>
+                            <label class="form-check-label" for="ethicsAgreement">
+                                I confirm that I have authorization to scan this target and will use the results responsibly.
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-play me-2"></i>Start Scan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6 mx-auto">
+            <div class="card bg-dark text-white border-0">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-lightbulb me-2"></i>Scanning Tips</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent text-white border-secondary">Running all scans may take several minutes depending on the target</li>
+                        <li class="list-group-item bg-transparent text-white border-secondary">For faster results, select only the modules you need</li>
+                        <li class="list-group-item bg-transparent text-white border-secondary">Port scanning and directory discovery are the most time-consuming operations</li>
+                        <li class="list-group-item bg-transparent text-white border-secondary">Results are stored temporarily in your session</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
