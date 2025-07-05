@@ -6,4 +6,4 @@ if [ -d "venv" ]; then
 fi
 
 # Start the ReconSuite application
-python main.py
+python3 main.py
